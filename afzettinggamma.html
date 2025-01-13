@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <a href="index.html" class="home-icon"><i class="fas fa-home"></i></a>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afzetting Berekening</title>
+    <style>
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            padding: 50px;
+            margin: 0;
+        }
+
+        
+    </style>
+    <script>
+        function berekenAfzettingIr192(Ci, wanddikte_pb, wanddikte_fe, gewenste_dosis) {
+            const afzetting = Math.sqrt((Ci * 37000 * 0.13 * Math.pow(0.5, (wanddikte_pb / 3)) * Math.pow(0.5, (wanddikte_fe / 13))) / gewenste_dosis);
+            const afstand_collimator = Math.sqrt((Ci * 37000 * 0.13 * 0.012) / gewenste_dosis);
+            return { afzetting, afstand_collimator };
+        }
+
+        function berekenAfzettingSe75(Ci, wanddikte_pb, wanddikte_fe, gewenste_dosis) {
+            const afzetting = Math.sqrt((Ci * 37000 * 0.054 * Math.pow(0.5, (wanddikte_pb / 2)) * Math.pow(0.5, (wanddikte_fe / 5))) / gewenste_dosis);
+            const afstand_collimator = Math.sqrt((Ci * 37000 * 0.054 * 0.05) / gewenste_dosis);
+            return { afzetting, afstand_collimator };
+        }
+
+        function bereken() {
+            const keuze = document.querySelector('input[name="bron"]:checked').value;
+            const Ci = parseFloat(document.getElementById("Ci").value);
+            const wanddikte_pb = parseFloat(document.getElementById("wanddikte_pb").value);
+            const wanddikte_fe = parseFloat(document.getElementById("wanddikte_fe").value);
+            const gewenste_dosis = parseFloat(document.getElementById("gewenste_dosis").value);
+            
+            let resultaat;
+            if (keuze === "Ir192") {
+                resultaat = berekenAfzettingIr192(Ci, wanddikte_pb, wanddikte_fe, gewenste_dosis);
+            } else if (keuze === "Se75") {
+                resultaat = berekenAfzettingSe75(Ci, wanddikte_pb, wanddikte_fe, gewenste_dosis);
+            }
+
+            document.getElementById("resultaat").innerHTML = 
+                "De benodigde afzetting is: " + resultaat.afzetting.toFixed(2) + " meter<br>" +
+                "De afstand achter de collimator is: " + resultaat.afstand_collimator.toFixed(2) + " meter";
+        }
+    </script>
+</head>
+<body>
+    <h1 style="color: #F5DF4D; text-align: center;">Afzetting gamma</h1>
+
+      <!-- De knop om het pop-up venster te openen -->
+    <button class="info-btn" onclick="openModal('myModal')">i</button>
+
+    <!-- Het pop-up venster -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myModal')">&times;</span>
+            <p>De grootte van de afzetting wordt bepaald in de bundel en achter de collimator. 
+               Er wordt gebruikt gemaakt van de de collimatoren zoals in het veiligheidsboekje: Se75 1/20, Ir192 1/85.
+               Als de bundel door staal of lood heen moet kan de afzetting kleiner, door de juiste waardes in te voeren in die velden kun je zien hoe groot je afzetting moet zijn.
+            </p>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- Link naar externe JavaScript -->
+
+    <form>
+        <label>Kies een gamma bron:</label><br>
+        <input type="radio" id="Ir192" name="bron" value="Ir192" checked>
+        <label for="Ir192">Iridium-192 (Ir192)</label><br>
+        <input type="radio" id="Se75" name="bron" value="Se75">
+        <label for="Se75">Selenium-75 (Se75)</label><br><br>
+
+        <label for="Ci">Voer de hoeveelheid Ci in:</label><br>
+        <input type="number" id="Ci" step="any"><br><br>
+
+        <label for="wanddikte_pb">Voer de doorstraalde dikte lood (Pb) in, in (mm):</label><br>
+        <input type="number" id="wanddikte_pb" step="any"><br><br>
+
+        <label for="wanddikte_fe">Voer de doorstraalde dikte staal in, in (mm):</label><br>
+        <input type="number" id="wanddikte_fe" step="any"><br><br>
+
+        <label for="gewenste_dosis">Voer de gewenste dosis in (μSv/h):</label><br>
+        <input type="number" id="gewenste_dosis" step="any"><br><br>
+
+        <button type="button" onclick="bereken()">Bereken</button>
+    </form>
+
+    <h2>Resultaat</h2>
+    <p id="resultaat" style="color: #F5DF4D;"></p>
+</body>
+</html>

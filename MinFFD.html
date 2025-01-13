@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <a href="index.html" class="home-icon"><i class="fas fa-home"></i></a>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Focus Afstand Berekening</title>
+    <style>
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            padding: 50px;
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 style="color: #F5DF4D; text-align: center;">Bepaal de Minimale FFD</h1>
+
+     <!-- De knop om het pop-up venster te openen -->
+    <button class="info-btn" onclick="openModal('myModal')">i</button>
+
+    <!-- Het pop-up venster -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myModal')">&times;</span>
+            <p>De minimale bron film afstand wordt bij EN bepaald doormiddel van de formules waar het nomogram op gebaseerd is en bij ASME doormiddel van de formule voor geometrische onscherpte.
+            Er wordt bij ASME automatisch de juiste formule gebruikt tot 100mm wanddikte. Bij EN kun je de optie excentrisch of centraal aanklikken waardoor er 20%(excentrisch) of 50%(centraal) van de FFD wordt afgetrokken. </p>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- Link naar externe JavaScript -->
+
+
+    <form id="ffdForm">
+        <label for="ofa">Object Film Afstand (OFA):</label>
+        <input type="number" id="ofa" name="ofa" step="0.01" required><br><br>
+
+        <label for="brongrootte">Brongrootte:</label>
+        <input type="number" id="brongrootte" name="brongrootte" step="0.01" required><br><br>
+
+        <label for="standaard">Kies een standaard:</label>
+        <select id="standaard" name="standaard" required>
+            <option value="1">EN-klasse A</option>
+            <option value="2">EN-klasse B</option>
+            <option value="3">ASME</option>
+        </select><br><br>
+
+        <div id="extraOpties" style="display:none;">
+            <label for="optie">Kies een extra optie (optioneel):</label>
+            <select id="optie" name="optie">
+                <option value="">Geen</option>
+                <option value="1">Centraal</option>
+                <option value="2">Excentrisch</option>
+            </select><br><br>
+        </div>
+
+        <div id="wanddikteInput" style="display:none;">
+            <label for="wt">Wanddikte (wt) in mm:</label>
+            <input type="number" id="wt" name="wt" step="0.01"><br><br>
+        </div>
+
+        <button type="button" onclick="berekenFFD()">Bereken FFD</button>
+    </form>
+
+    <p id="output" style="color: #F5DF4D;"></p>
+
+    <script>
+        const standaardSelect = document.getElementById("standaard");
+        const extraOptiesDiv = document.getElementById("extraOpties");
+        const wanddikteDiv = document.getElementById("wanddikteInput");
+
+        standaardSelect.addEventListener("change", function() {
+            if (standaardSelect.value === '1' || standaardSelect.value === '2') {
+                extraOptiesDiv.style.display = "block";
+                wanddikteDiv.style.display = "none";
+            } else if (standaardSelect.value === '3') {
+                extraOptiesDiv.style.display = "none";
+                wanddikteDiv.style.display = "block";
+            } else {
+                extraOptiesDiv.style.display = "none";
+                wanddikteDiv.style.display = "none";
+            }
+        });
+
+        function berekenFFD() {
+            let ofa = parseFloat(document.getElementById("ofa").value);
+            let brongrootte = parseFloat(document.getElementById("brongrootte").value);
+            let keuze = document.getElementById("standaard").value;
+            let output = document.getElementById("output");
+            let centraal = false;
+            let excentrisch = false;
+            let ffd;
+
+            output.innerHTML = "";
+
+            if (keuze === '1' || keuze === '2') {
+                let optie = document.getElementById("optie").value;
+                if (optie === '1') {
+                    centraal = true;
+                } else if (optie === '2') {
+                    excentrisch = true;
+                }
+            }
+
+            if (keuze === '3') {  // ASME
+                let wt = parseFloat(document.getElementById("wt").value);
+                if (wt < 50) {
+                    var boa = (brongrootte * ofa) / 0.51;
+                } else if (wt >= 50 && wt < 75) {
+                    var boa = (brongrootte * ofa) / 0.76;
+                } else if (wt >= 75 && wt <= 100) {
+                    var boa = (brongrootte * ofa) / 1.02;
+                } else {
+                    output.innerHTML += "Ongeldige wanddikte. Voer een waarde tussen 0 en 100 mm in.<br>";
+                    return;
+                }
+                ffd = boa + ofa;
+            } else if (keuze === '2') {  // EN-klasse B
+                ffd = (brongrootte * 15 * Math.pow(ofa, 2 / 3)) + ofa;
+                if (centraal) {
+                    ffd *= 0.5;
+                } else if (excentrisch) {
+                    ffd *= 0.8;
+                }
+            } else if (keuze === '1') {  // EN-klasse A
+                ffd = (brongrootte * 7.5 * Math.pow(ofa, 2 / 3)) + ofa;
+                if (centraal) {
+                    ffd *= 0.5;
+                } else if (excentrisch) {
+                    ffd *= 0.8;
+                }
+            } else {
+                output.innerHTML += "Ongeldige keuze. Voer 1, 2 of 3 in.<br>";
+                return;
+            }
+
+            output.innerHTML += `De berekende Film Focus Afstand (FFD) is: ${ffd.toFixed(2)} mm<br>`;
+        }
+    </script>
+</body>
+</html>

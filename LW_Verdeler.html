@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Langsnaad verdeler</title>
+    <link rel="stylesheet" href="styles.css">
+    <a href="index.html" class="home-icon"><i class="fas fa-home"></i></a>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            padding: 50px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto; /* Centrerend */
+            text-align: center; /* Centreer tekst */
+        }
+
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%; /* Zorgt dat invoervelden de hele breedte nemen binnen de container */
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-family: 'Roboto Condensed',sans-serif;
+            font-size: 35px;
+            font-weight: bold;
+            color: #F5DF4D;
+        }
+
+        @media (max-width: 768px) {
+            .link-list {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- De knop om het pop-up venster te openen -->
+    <button class="info-btn" onclick="openModal('myModal')">i</button>
+
+    <!-- Het pop-up venster -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myModal')">&times;</span>
+            <p>Deze LW verdeler geeft je het aantal films en de afstanden waarop je de verdeelstrepen kunt zetten. Standaard is de afstand tussen 2 strepen maximaal 400mm en de uiteindes zijn standaard op 200mm ingesteld. Bij dunne wanddiktes kun je in sommige situaties deze afstanden veranderen zodat je met 1 film minder dezelfde lengte kunt behalen, Hou er rekening mee dat dit beter te vermijden is bij dikkere wanddiktes.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- Link naar externe JavaScript -->
+    
+    <div class="container">
+        <h1 style="color: #F5DF4D; text-align: center;">Langsnaad Verdeler</h1>
+        <p>Voer de totale lengte in (in mm):</p>
+        <input type="number" id="totaleLengte" placeholder="Totale lengte in mm" required>
+
+        <button onclick="verdeelLengte()">Verdeel Lengte</button>
+        <p id="resultaat" style="color: #F5DF4D;"></p>
+
+        <h2>Optioneel:</h2>        
+
+
+        <p>Voer de maximale lengte per deel in (in mm, standaard 400 mm):</p>
+        <input type="number" id="maxLengte" value="400" required>
+        
+        <p>Voer de lengte van de uiteindes in (in mm, standaard 200 mm, maximaal 230 mm):</p>
+        <input type="number" id="uiteindeLengte" value="200" max="230" required>
+        
+    </div>
+
+    <script>
+        function verdeelLengte() {
+            const totaleLengte = parseFloat(document.getElementById('totaleLengte').value);
+            const maxLengte = parseFloat(document.getElementById('maxLengte').value);
+            let uiteindeLengte = parseFloat(document.getElementById('uiteindeLengte').value);
+            
+            // Validatie van de uiteindelengte
+            if (uiteindeLengte > 220) {
+                uiteindeLengte = 220;
+            } else if (uiteindeLengte < 0) {
+                document.getElementById('resultaat').innerText = "De uiteindelengte moet positief zijn.";
+                return;
+            }
+
+            if (isNaN(totaleLengte) || totaleLengte <= maxLengte || isNaN(uiteindeLengte)) {
+                document.getElementById('resultaat').innerText = `De totale lengte moet meer dan ${maxLengte} mm zijn en de uiteindelengte moet geldig zijn.`;
+                return;
+            }
+
+            // Trek de uiteindelengte (x2) af van de totale lengte
+            const resterendeLengte = totaleLengte - (uiteindeLengte * 2);
+
+            // Controleer of de resterende lengte voldoende is
+            if (resterendeLengte <= 0) {
+                document.getElementById('resultaat').innerText = `De totale lengte is te kort voor deze uiteindelengte.`;
+                return;
+            }
+
+            // Bereken het minimaal aantal stukken voor de opgegeven maximale lengte
+            const aantalStukken = Math.ceil(resterendeLengte / maxLengte);
+            const stukLengte = resterendeLengte / aantalStukken;
+
+            // Tel 1 op bij het aantal stukken voor de uiteinde (eerste stuk)
+            const totaalAantalFilms = aantalStukken + 1;
+
+            // Resultaat weergeven
+            let resultaat = `De totale lengte van ${totaleLengte} mm wordt als volgt verdeeld:\n`;
+            resultaat += `- Uiteinde: 2 x ${uiteindeLengte} mm\n`;
+            resultaat += `- Totaal aantal films: ${totaalAantalFilms}\n`;
+            resultaat += `- Lengte per stuk: ${stukLengte.toFixed(2)} mm\n`;
+
+            document.getElementById('resultaat').innerText = resultaat;
+        }
+    </script>
+
+</body>
+</html>

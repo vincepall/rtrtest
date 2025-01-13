@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <a href="index.html" class="home-icon"><i class="fas fa-home"></i></a>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focusverandering en Filmtype verandering</title>
+    <style>
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            padding: 50px;
+            margin: 0;
+        }
+
+        
+    </style>
+    <script>
+        // Functie om minuten en seconden naar totale seconden om te zetten
+        function tijdNaarSeconden(minuten, seconden) {
+            return (minuten * 60) + seconden;
+        }
+
+        // Functie om seconden om te zetten naar minuten:seconden
+        function secondenNaarTijd(seconden) {
+            const minuten = Math.floor(seconden / 60);
+            const restSeconden = Math.floor(seconden % 60);
+            return `${minuten}:${restSeconden < 10 ? '0' : ''}${restSeconden}`;
+        }
+
+        // Functie om de focusverandering te berekenen
+        function berekenFocusverandering(begintijd, nieuweFocus, oudeFocus) {
+            return begintijd * Math.pow(nieuweFocus / oudeFocus, 2);
+        }
+
+        // Functies om D5 en D7 te berekenen van D4
+        function berekenD5D7VanD4(d4) {
+            const d5 = d4 / 1.6666;
+            const d7 = d4 / 2.44;
+            return { d5, d7 };
+        }
+
+        // Functies om D4 en D7 te berekenen van D5
+        function berekenD4D7VanD5(d5) {
+            const d4 = d5 * 1.6666;
+            const d7 = d4 / 2.44;
+            return { d4, d7 };
+        }
+
+        // Functies om D4 en D5 te berekenen van D7
+        function berekenD4D5VanD7(d7) {
+            const d4 = d7 * 2.44;
+            const d5 = d4 / 1.6666;
+            return { d4, d5 };
+        }
+
+        // Functie om te berekenen op basis van de invoer
+        function bereken() {
+            const minuten = parseInt(document.getElementById("minuten").value);
+            const seconden = parseInt(document.getElementById("seconden").value);
+            const nieuweFocus = parseFloat(document.getElementById("nieuwe_focus").value);
+            const oudeFocus = parseFloat(document.getElementById("oude_focus").value);
+            const filmtypeVeranderd = document.getElementById("filmtype_veranderd").checked;
+
+            if (isNaN(minuten) || isNaN(seconden) || isNaN(nieuweFocus) || isNaN(oudeFocus)) {
+                document.getElementById("resultaat").innerHTML = "Voer geldige waarden in.";
+                return;
+            }
+
+            const begintijdInSeconden = tijdNaarSeconden(minuten, seconden);
+            let nieuweTijd = berekenFocusverandering(begintijdInSeconden, nieuweFocus, oudeFocus);
+
+            if (filmtypeVeranderd) {
+                const filmtype = document.querySelector('input[name="filmtype"]:checked').value;
+
+                if (filmtype === "D4") {
+                    const resultaat = berekenD5D7VanD4(nieuweTijd);
+                    document.getElementById("resultaat").innerHTML = 
+                        `D5 = ${secondenNaarTijd(resultaat.d5)}<br>D7 = ${secondenNaarTijd(resultaat.d7)}`;
+                } else if (filmtype === "D5") {
+                    const resultaat = berekenD4D7VanD5(nieuweTijd);
+                    document.getElementById("resultaat").innerHTML = 
+                        `D4 = ${secondenNaarTijd(resultaat.d4)}<br>D7 = ${secondenNaarTijd(resultaat.d7)}`;
+                } else if (filmtype === "D7") {
+                    const resultaat = berekenD4D5VanD7(nieuweTijd);
+                    document.getElementById("resultaat").innerHTML = 
+                        `D4 = ${secondenNaarTijd(resultaat.d4)}<br>D5 = ${secondenNaarTijd(resultaat.d5)}`;
+                }
+            } else {
+                document.getElementById("resultaat").innerHTML = 
+                    `De berekende tijd na focusverandering is: ${secondenNaarTijd(nieuweTijd)}`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1 style="color: #F5DF4D; text-align: center;">Focusverandering en Filmtype Berekening</h1>
+    
+    <!-- De knop om het pop-up venster te openen -->
+    <button class="info-btn" onclick="openModal('myModal')">i</button>
+
+    <!-- Het pop-up venster -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myModal')">&times;</span>
+            <p>De tijd na de verandering van bron-film afstand wordt berekend door de kwadratenwet toe te passen t2=t1*((A2/A1)^2). Kies het filmtype dat hoort bij de begintijd om te zien wat de tijd is na verandering van filmsoort.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- Link naar externe JavaScript -->
+
+    <form>
+        <label for="minuten">Voer de begintijd in:</label><br>
+        Minuten: <input type="number" id="minuten" placeholder="Minuten" min="0"><br>
+        Seconden: <input type="number" id="seconden" placeholder="Seconden" min="0" max="59"><br><br>
+
+        <label for="nieuwe_focus">Voer de waarde van nieuwe focus in:</label><br>
+        <input type="number" id="nieuwe_focus" step="any" placeholder="Nieuwe focus"><br><br>
+
+        <label for="oude_focus">Voer de waarde van oude focus in:</label><br>
+        <input type="number" id="oude_focus" step="any" placeholder="Oude focus"><br><br>
+
+        <label for="filmtype_veranderd">Verandert het filmtype?</label>
+        <input type="checkbox" id="filmtype_veranderd" onchange="document.getElementById('filmtype_keuze').style.display = this.checked ? 'block' : 'none';"><br><br>
+
+        <div id="filmtype_keuze" style="display: none;">
+            <label for="filmtype">Filmtype van de begintijd:</label><br>
+            <input type="radio" id="D4" name="filmtype" value="D4" checked> D4<br>
+            <input type="radio" id="D5" name="filmtype" value="D5"> D5<br>
+            <input type="radio" id="D7" name="filmtype" value="D7"> D7<br><br>
+        </div>
+
+        <button type="button" onclick="bereken()">Bereken</button>
+    </form>
+
+    <h2>Resultaat</h2>
+    <p id="resultaat" style="color: #F5DF4D;"></p>
+</body>
+</html>
