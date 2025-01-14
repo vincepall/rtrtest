@@ -16,7 +16,7 @@ body {
     padding: 50px;
     margin: 0;
     color: var(--text-color);
-    text-shadow: 1px 1px 2px black;
+    text-shadow: 2px 2px 3px black;
     background-image: url('bg2.jpg');
     background-size: cover; /* This will make the image cover the entire background */
     background-position: center; /* This will center the image */
@@ -51,6 +51,7 @@ p {
 
 .link-list a {
     text-decoration: none;
+    text-shadow: none;
     color: var(--text-color);
     background-color: var(--button-color);
     padding: 12px 20px; /* Iets kleinere padding voor compactheid */
