@@ -16,7 +16,7 @@ body {
     padding: 50px;
     margin: 0;
     color: var(--text-color);
-    background-image: url('plaatbg.jpg');
+    background-image: url('staalbg.jpg');
     background-size: cover; /* This will make the image cover the entire background */
     background-position: center; /* This will center the image */
     background-repeat: no-repeat; /* This prevents the image from repeating */
