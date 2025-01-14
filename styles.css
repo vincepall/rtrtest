@@ -16,7 +16,7 @@ body {
     padding: 50px;
     margin: 0;
     color: var(--text-color);
-    text-shadow: 2px 2px 3px black, 0 0 1em white;
+    text-shadow: 2px 2px 3px black, 0 0 0.05em white;
     background-image: url('bg2.jpg');
     background-size: cover; /* This will make the image cover the entire background */
     background-position: center; /* This will center the image */
