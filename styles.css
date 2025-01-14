@@ -20,7 +20,7 @@ body {
     background-size: cover; /* This will make the image cover the entire background */
     background-position: center; /* This will center the image */
     background-repeat: no-repeat; /* This prevents the image from repeating */
-    background-attachment: local; /* Makes the background stay fixed when scrolling */
+    background-attachment: scroll; /* Makes the background stay fixed when scrolling */
     height: 100vh; /* Ensures the body covers the entire height of the viewport */
     margin: 0; /* Removes any default margin that might affect the body size */
 }
