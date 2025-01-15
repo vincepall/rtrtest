@@ -148,6 +148,8 @@ p {
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Je kunt deze breedte aanpassen naar wens */
+    text-shadow: none;
+
 }
 
 /* Stijl voor de sluitknop (x) */
