@@ -12,23 +12,24 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden; /* voorkom scrollbars */
+            overflow: hidden;
         }
         #ruler-container {
             position: relative;
-            width: 100%; /* Breedte op 100% van het scherm */
-            height: 100vh; /* Hoogte op volledige schermhoogte */
-            max-width: 1149px; /* Maximale breedte gelijk aan de afbeelding */
+            width: 100%;
+            height: 100vh;
+            max-width: 1149px;
             overflow: hidden;
+            touch-action: none; /* voorkomt standaard touchscreen-gedrag */
         }
         .ruler {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%; /* Schaal de breedte naar het scherm */
-            height: auto; /* Houd de verhoudingen intact */
+            width: 100%;
+            height: auto;
             user-select: none;
-            touch-action: none; /* Voorkom standaard browsergedrag bij aanraking */
+            touch-action: none;
         }
         #schuif1 {
             z-index: 1;
@@ -65,9 +66,10 @@
         <img id="schuif4" class="ruler" src="schuif4.png" alt="Schuif 4">
 
         <div id="controls">
-            <label><input type="radio" name="schuifSelect" value="schuif3" checked> Schuif 3</label>
+            <label><input type="radio" name="schuifSelect" value="schuif3"> Schuif 3</label>
             <label><input type="radio" name="schuifSelect" value="schuif2"> Schuif 2</label>
             <label><input type="radio" name="schuifSelect" value="schuif4"> Schuif 4</label>
+            <label><input type="radio" name="schuifSelect" value="none" checked> Alles vastzetten</label>
         </div>
     </div>
 
@@ -80,7 +82,7 @@
         let startY = 0;
         let startTop = 0;
 
-        // Selecteren van schuif
+        // Selecteren van schuif of alles vastzetten
         document.querySelectorAll('input[name="schuifSelect"]').forEach(radio => {
             radio.addEventListener('change', () => {
                 const selectedValue = document.querySelector('input[name="schuifSelect"]:checked').value;
@@ -94,12 +96,12 @@
                     case 'schuif4':
                         activeImage = schuif4;
                         break;
+                    case 'none':
+                        activeImage = null; // Alles vastzetten
+                        break;
                 }
             });
         });
-
-        // Standaard begint met schuif3
-        activeImage = schuif3;
 
         function handleDragStart(e) {
             if (!activeImage) return;
