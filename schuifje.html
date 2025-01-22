@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Sliding Ruler voor Stralingstijd</title>
     <style>
         body {
@@ -10,17 +10,16 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Zorgt ervoor dat je vanaf boven kunt scrollen */
             height: 100vh;
-            overflow: hidden;
+            overflow: auto; /* Maakt scrollen mogelijk */
         }
         #ruler-container {
             position: relative;
             width: 100%;
-            height: 100vh;
             max-width: 1149px;
-            overflow: hidden;
-            touch-action: none; /* voorkomt standaard touchscreen-gedrag */
+            height: auto; /* Laat de hoogte dynamisch */
+            touch-action: none; /* Voorkomt standaard touchscreen-gedrag */
         }
         .ruler {
             position: absolute;
@@ -64,7 +63,7 @@
         <img id="schuif2" class="ruler" src="schuif2.png" alt="Schuif 2">
         <img id="schuif3" class="ruler" src="schuif3.png" alt="Schuif 3">
         <img id="schuif4" class="ruler" src="schuif4.png" alt="Schuif 4">
-
+        
         <div id="controls">
             <label><input type="radio" name="schuifSelect" value="schuif3"> Schuif 3</label>
             <label><input type="radio" name="schuifSelect" value="schuif2"> Schuif 2</label>
