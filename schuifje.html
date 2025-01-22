@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding Ruler voor Stralingstijd</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #ruler-container {
+            position: relative;
+            width: 1149px;
+            height: 2961px;
+            touch-action: none;
+        }
+        .ruler {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            user-select: none;
+        }
+        #schuif1 {
+            z-index: 1;
+        }
+        #schuif2 {
+            z-index: 2;
+        }
+        #schuif3 {
+            z-index: 3;
+        }
+        #schuif4 {
+            z-index: 4;
+        }
+        input[type="checkbox"] {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 5;
+        }
+        #lockLabel {
+            position: absolute;
+            top: 10px;
+            left: 35px;
+            z-index: 5;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="ruler-container">
+        <img id="schuif1" class="ruler" src="schuif1.png" alt="Schuif 1">
+        <img id="schuif2" class="ruler" src="schuif2.png" alt="Schuif 2">
+        <img id="schuif3" class="ruler" src="schuif3.png" alt="Schuif 3">
+        <img id="schuif4" class="ruler" src="schuif4.png" alt="Schuif 4">
+        <input type="checkbox" id="lockSchuif2">
+        <label id="lockLabel" for="lockSchuif2">Schuif2 vastzetten</label>
+    </div>
+
+    <script>
+        const schuif1 = document.getElementById('schuif1');
+        const schuif2 = document.getElementById('schuif2');
+        const schuif3 = document.getElementById('schuif3');
+        const schuif4 = document.getElementById('schuif4');
+        const lockSchuif2 = document.getElementById('lockSchuif2');
+
+        let activeImage = null;
+        let startY = 0;
+        let startTop = 0;
+
+        function handleDragStart(e, img) {
+            if (img === schuif2 && lockSchuif2.checked) return; // Schuif2 vastzetten
+            activeImage = img;
+            startY = e.touches ? e.touches[0].clientY : e.clientY;
+            startTop = parseInt(window.getComputedStyle(img).top, 10) || 0;
+        }
+
+        function handleDrag(e) {
+            if (!activeImage) return;
+            const currentY = e.touches ? e.touches[0].clientY : e.clientY;
+            const deltaY = currentY - startY;
+            activeImage.style.top = `${startTop + deltaY}px`;
+        }
+
+        function handleDragEnd() {
+            activeImage = null;
+        }
+
+        // Event listeners voor schuif3 (linkerkant), schuif2 (midden), schuif4 (rechterkant)
+        schuif3.addEventListener('mousedown', (e) => handleDragStart(e, schuif3));
+        schuif3.addEventListener('touchstart', (e) => handleDragStart(e, schuif3));
+        schuif3.addEventListener('mousemove', handleDrag);
+        schuif3.addEventListener('touchmove', handleDrag);
+        schuif3.addEventListener('mouseup', handleDragEnd);
+        schuif3.addEventListener('touchend', handleDragEnd);
+
+        schuif2.addEventListener('mousedown', (e) => handleDragStart(e, schuif2));
+        schuif2.addEventListener('touchstart', (e) => handleDragStart(e, schuif2));
+        schuif2.addEventListener('mousemove', handleDrag);
+        schuif2.addEventListener('touchmove', handleDrag);
+        schuif2.addEventListener('mouseup', handleDragEnd);
+        schuif2.addEventListener('touchend', handleDragEnd);
+
+        schuif4.addEventListener('mousedown', (e) => handleDragStart(e, schuif4));
+        schuif4.addEventListener('touchstart', (e) => handleDragStart(e, schuif4));
+        schuif4.addEventListener('mousemove', handleDrag);
+        schuif4.addEventListener('touchmove', handleDrag);
+        schuif4.addEventListener('mouseup', handleDragEnd);
+        schuif4.addEventListener('touchend', handleDragEnd);
+
+        // Voorkom scrollen bij aanraken
+        document.addEventListener('touchmove', (e) => {
+            if (activeImage) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
