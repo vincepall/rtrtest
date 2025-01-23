@@ -126,9 +126,9 @@
 
                 // Toggle no-scroll class en scrollbaarheid instellen
                 if (selectedValue === 'none') {
-                    body.classList.remove('no-scroll');
+                    body.classList.remove('no-scroll'); // Scrollen toestaan als alles vergrendeld is
                 } else {
-                    body.classList.add('no-scroll');
+                    body.classList.add('no-scroll'); // Scrollen voorkomen als een schuif geselecteerd is
                 }
             });
         });
