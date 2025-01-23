@@ -19,7 +19,7 @@
             width: 100%;
             max-width: 1149px;
             height: auto; /* Laat de hoogte dynamisch */
-            touch-action: none; /* Voorkomt standaard touchscreen-gedrag */
+            touch-action: manipulation; /* Voorkomt standaard touchscreen-gedrag */
         }
         .ruler {
             position: absolute;
@@ -28,7 +28,7 @@
             width: 100%;
             height: auto;
             user-select: none;
-            touch-action: none;
+            touch-action: manipulation;
         }
         #schuif1 {
             z-index: 1;
@@ -63,7 +63,7 @@
         <img id="schuif2" class="ruler" src="schuif2.png" alt="Schuif 2">
         <img id="schuif3" class="ruler" src="schuif3.png" alt="Schuif 3">
         <img id="schuif4" class="ruler" src="schuif4.png" alt="Schuif 4">
-        
+
         <div id="controls">
             <label><input type="radio" name="schuifSelect" value="schuif3"> Schuif 3</label>
             <label><input type="radio" name="schuifSelect" value="schuif2"> Schuif 2</label>
