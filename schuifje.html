@@ -55,6 +55,8 @@
             left: 10px;
             z-index: 5;
             color: white;
+            display: flex; /* Add flexbox to the controls div */
+            flex-wrap: wrap; /* Allow elements to wrap */
         }
         input[type="radio"] {
             margin: 5px;
@@ -67,10 +69,8 @@
 </head>
 <body>
 
-    <!-- De knop om het pop-up venster te openen -->
     <button class="info-btn" onclick="openModal('myModal')">i</button>
 
-    <!-- Het pop-up venster -->
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('myModal')">&times;</span>
@@ -78,9 +78,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script> <!-- Link naar externe JavaScript -->
-
-    <div id="ruler-container">
+    <script src="script.js"></script> <div id="ruler-container">
         <img id="schuif1" class="ruler" src="schuif1.png" alt="Schuif 1">
         <img id="schuif2" class="ruler" src="schuif2.png" alt="Schuif 2">
         <img id="schuif3" class="ruler" src="schuif3.png" alt="Schuif 3">
