@@ -14,12 +14,16 @@
             height: 100vh;
             overflow: none; /* Maakt scrollen mogelijk */
         }
+        .no-scroll {
+            overflow: hidden; 
+        }
         #ruler-container {
             position: relative;
             width: 100%;
             max-width: 1149px;
             height: 100%; /* Laat de hoogte dynamisch */
             touch-action: manipulation; /* Voorkomt standaard touchscreen-gedrag */
+            top: 50px; /* Adjust this value as needed */ 
         }
         .ruler {
             position: absolute;
@@ -73,6 +77,8 @@
     </div>
 
     <script>
+        const body = document.body;
+        const rulerContainer = document.getElementById('ruler-container');
         const schuif2 = document.getElementById('schuif2');
         const schuif3 = document.getElementById('schuif3');
         const schuif4 = document.getElementById('schuif4');
@@ -98,6 +104,15 @@
                     case 'none':
                         activeImage = null; // Alles vastzetten
                         break;
+                }
+
+                // Toggle no-scroll class and adjust top margin
+                if (selectedValue === 'schuif3' || selectedValue === 'schuif2' || selectedValue === 'schuif4') {
+                    body.classList.add('no-scroll');
+                    rulerContainer.style.top = '50px'; // Adjust this value as needed
+                } else {
+                    body.classList.remove('no-scroll');
+                    rulerContainer.style.top = '0'; 
                 }
             });
         });
