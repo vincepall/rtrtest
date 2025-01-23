@@ -21,7 +21,7 @@
             overflow: hidden;
         }
         #ruler-container {
-            position: absolute;
+            position: fixed;
             width: 100%;
             max-width: 1149px;
             height: 100%; /* Laat de hoogte dynamisch */
@@ -127,7 +127,7 @@
                 // Toggle no-scroll class and adjust top margin
                 if (selectedValue === 'schuif3' || selectedValue === 'schuif2' || selectedValue === 'schuif4') {
                     body.classList.add('no-scroll');
-                    rulerContainer.style.top = '50px'; // Adjust this value as needed
+                    rulerContainer.style.top = '210px'; // Adjust this value as needed
                 } else {
                     body.classList.remove('no-scroll');
                     rulerContainer.style.top = '0';
