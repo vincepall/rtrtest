@@ -24,8 +24,8 @@
             width: 100%;
             max-width: 1149px;
             height: auto;
-            position: relative; /* Change from fixed to relative for scrolling */
-            touch-action: manipulation; /* Voorkomt standaard touchscreen-gedrag */
+            position: relative; /* Laat de andere schuiven dynamisch scrollen */
+            touch-action: manipulation;
         }
         .ruler {
             position: absolute;
@@ -37,6 +37,8 @@
             touch-action: manipulation;
         }
         #schuif1 {
+            position: fixed; /* Zorg ervoor dat schuif1 altijd vast staat */
+            top: 210px; /* Altijd op 210px vanaf de bovenkant */
             z-index: 1;
         }
         #schuif2 {
