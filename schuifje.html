@@ -50,13 +50,13 @@
             z-index: 4;
         }
         #controls {
-            position: absolute;
+            position: fixed; /* Make controls fixed to the viewport */
             top: 10px;
             left: 10px;
             z-index: 5;
             color: white;
-            display: flex; /* Add flexbox to the controls div */
-            flex-wrap: wrap; /* Allow elements to wrap */
+            display: flex;
+            flex-wrap: wrap; 
         }
         input[type="radio"] {
             margin: 5px;
@@ -78,7 +78,9 @@
         </div>
     </div>
 
-    <script src="script.js"></script> <div id="ruler-container">
+    <script src="script.js"></script> 
+
+    <div id="ruler-container">
         <img id="schuif1" class="ruler" src="schuif1.png" alt="Schuif 1">
         <img id="schuif2" class="ruler" src="schuif2.png" alt="Schuif 2">
         <img id="schuif3" class="ruler" src="schuif3.png" alt="Schuif 3">
