@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
+    <a href="index.html" class="home-icon"><i class="fas fa-home"></i></a>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Sliding Ruler voor Stralingstijd</title>
@@ -15,7 +18,7 @@
             overflow: none; /* Maakt scrollen mogelijk */
         }
         .no-scroll {
-            overflow: hidden; 
+            overflow: hidden;
         }
         #ruler-container {
             position: relative;
@@ -23,7 +26,7 @@
             max-width: 1149px;
             height: 100%; /* Laat de hoogte dynamisch */
             touch-action: manipulation; /* Voorkomt standaard touchscreen-gedrag */
-            top: 50px; /* Adjust this value as needed */ 
+            top: 50px; /* Adjust this value as needed */
         }
         .ruler {
             position: absolute;
@@ -62,6 +65,20 @@
     </style>
 </head>
 <body>
+
+    <!-- De knop om het pop-up venster te openen -->
+    <button class="info-btn" onclick="openModal('myModal')">i</button>
+
+    <!-- Het pop-up venster -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myModal')">&times;</span>
+            <p>Werkt op dezelfde manier als het fysieke schuifje.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- Link naar externe JavaScript -->
+
     <div id="ruler-container">
         <img id="schuif1" class="ruler" src="schuif1.png" alt="Schuif 1">
         <img id="schuif2" class="ruler" src="schuif2.png" alt="Schuif 2">
@@ -112,7 +129,7 @@
                     rulerContainer.style.top = '50px'; // Adjust this value as needed
                 } else {
                     body.classList.remove('no-scroll');
-                    rulerContainer.style.top = '0'; 
+                    rulerContainer.style.top = '0';
                 }
             });
         });
