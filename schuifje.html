@@ -13,20 +13,19 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Zorgt ervoor dat je vanaf boven kunt scrollen */
-            height: 100vh;
-            overflow: auto; /* Maakt scrollen mogelijk */
+            align-items: flex-start; 
+            min-height: 100vh;
+            overflow-x: hidden;
         }
         .no-scroll {
             overflow: hidden;
         }
         #ruler-container {
-            position: fixed;
             width: 100%;
             max-width: 1149px;
-            height: 100%; /* Laat de hoogte dynamisch */
+            height: auto;
+            position: relative; /* Change from fixed to relative for scrolling */
             touch-action: manipulation; /* Voorkomt standaard touchscreen-gedrag */
-            top: 210px; /* Adjust this value as needed */
         }
         .ruler {
             position: absolute;
@@ -50,7 +49,7 @@
             z-index: 4;
         }
         #controls {
-            position: fixed; /* Make controls fixed to the viewport */
+            position: fixed;
             top: 45px;
             left: 5px;
             z-index: 5;
