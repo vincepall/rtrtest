@@ -49,6 +49,12 @@
                 document.getElementById("filmlengteResultaat").innerText = "Effectieve filmlengte per film: " + effectieveFilmlengte.toFixed(2) + " mm";
                 document.getElementById("filmlengtesLijst").innerHTML = ""; // Verwijder de filmlijst als rondnaad centraal is aangevinkt
             }
+
+            // Scroll naar het antwoordgedeelte
+            window.scrollTo({
+                top: document.getElementById("antwoordResultaat").offsetTop,
+                behavior: 'smooth'
+            });
         }
 
         function toggleOpnamesInput() {
@@ -74,16 +80,16 @@
             margin: 0;
         }
 
-        /* knop naar link*/
+        /* Vergroot de bereken knop en geef het dezelfde gele kleur als de titel */
         .btn {
-            background-color: #666;
+            background-color: #F5DF4D; /* Gele kleur */
             border: none;
             color: black;
-            padding: 10px 20px;
+            padding: 15px 30px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
-            font-size: 16px;
+            font-size: 18px;
             margin: 4px 2px;
             cursor: pointer;
             border-radius: 8px;
@@ -133,6 +139,53 @@
             text-decoration: none;
             cursor: pointer;
         }
+        
+        .link-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .link-list li {
+            margin: 5px;
+        }
+
+        .link-list a {
+            text-decoration: none;
+            color: #000000;
+            padding: 10px 30px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: transform 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-size: contain; /* Zorgt ervoor dat de afbeelding niet wordt gecropt */
+            background-position: center;
+            background-repeat: no-repeat; /* Voorkom dat de afbeelding herhaald wordt */
+            width: 200px;
+            height: 50px;
+            background-color: transparent;
+            gap: 10px;
+
+        }
+
+        .link-list a:hover {
+            transform: scale(1.05);
+            background-color: transparent;
+        }
+
+
+
+
+        /* Specifieke achtergrondafbeeldingen voor elke link */
+        .link1 {
+            background-image: url('tape1.PNG');
+        }
+        
     </style>
 </head>
 <body>
@@ -145,25 +198,25 @@
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('myModal')">&times;</span>
-            <p>(Diameter * pi) / aantal opnames. 
+            <p>(Diameter * pi) / aantal opnames.
                 Als "rondnaad centraal" wordt aangevinkt zal het programma kijken hoeveel films er nodig zijn gebaseerd op films met een lengte van 480mm met een maximale effectieve lengte van 400mm i.v.m. de overlap.
             </p>
         </div>
     </div>
 
     <script src="script.js"></script> <!-- Link naar externe JavaScript -->
-    
+
     <form onsubmit="event.preventDefault(); berekenFilmlengte();">
+        <label for="rondnaadCentraal">Centraal:</label>
+        <input type="checkbox" id="rondnaadCentraal" name="rondnaadCentraal" onclick="toggleOpnamesInput()"><br><br>
+        
         <label for="diameter">Diameter van de pijp (in mm):</label><br>
         <input type="number" id="diameter" name="diameter" step="0.01" required><br><br>
 
         <label for="opnames">Aantal opnames:</label><br>
         <input type="number" id="opnames" name="opnames" required><br><br>
 
-        <label for="rondnaadCentraal">Rondnaad Centraal:</label>
-        <input type="checkbox" id="rondnaadCentraal" name="rondnaadCentraal" onclick="toggleOpnamesInput()"><br><br>
-
-        <input type="submit" value="Bereken">
+        <input type="submit" class="btn" value="Bereken">
     </form>
 
     <h2>Resultaat:</h2>
@@ -171,6 +224,10 @@
     <p id="antwoordResultaat" style="color: #F5DF4D;"></p>
     <p id="filmlengteResultaat" style="color: #F5DF4D;"></p>
     <div id="filmlengtesLijst" style="color: #F5DF4D;"></div>
+
+    <ul class="link-list">
+        <li><a href="opnamesklasseb.html" class="link1"><i class="fa-solid fa-star-of-life"></i>Aantal opnames EN<i class="fa-solid fa-star-of-life"></i></a></li>
+    </ul>    
 
     <img src="Schedulematen.png" alt="Ter info" onclick="showImageFullSize(this)">
 

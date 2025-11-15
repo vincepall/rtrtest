@@ -15,6 +15,20 @@
             margin: 0;
         }
 
+        .btn {
+            background-color: #F5DF4D; /* Gele kleur */
+            border: none;
+            color: black;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
     </style>
 </head>
 <body>
@@ -28,7 +42,7 @@
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('myModal')">&times;</span>
-            <p>Deze tool gaat uit van de nominale wanddikte bij EN en zal bij ASME de maximale lasoverdikte voorstellen en bij de wanddikte tellen.
+            <p>Deze tool gaat uit van de nominale wanddikte bij EN en zal bij ASME de maximale lasoverdikte voorstellen en bij de wanddikte tellen (Let op, je mag theoretisch 2x de lasoverdikte tellen maar de tool doet maar 1x de maximale lasoverdikte voorstellen, je kan het zelf aanpassen naar max 2x de lasoverdikte).
             Bij EN wordt er gebruikt van de regel dat bij gebruik van Se75 of Ir192 er bij bepaalde diktes een draadje minder zichtbaar hoeft te zijn, dit doet de tool al meenemen en je hoeft dus niet zelf nog een draadje minder te nemen. De tool gaat er van uit dat de BKI bij DWSI aan Filmzijde zit en bij DWDI of SWSI aan Bronzijde.
             </p>
         </div>
@@ -41,19 +55,20 @@
         <label for="norm">Kies de norm:</label>
         <select id="norm" name="norm" required>
             <option value="" disabled selected>Selecteer norm</option>
-            <option value="EN">EN Klasse B</option>
+            <option value="EN-A">EN Klasse A</option>
+            <option value="EN-B">EN Klasse B</option>
             <option value="ASME">ASME</option>
         </select>
         <br><br>
 
         <label for="wanddikte">Wanddikte t (mm):</label>
-        <input type="number" id="wanddikte" name="wanddikte" step="0.1" placeholder="Vul wanddikte in" required>
+        <input type="number" id="wanddikte" name="wanddikte" step="any" placeholder="Vul wanddikte in" required>
         <br><br>
 
         <div id="enOptions" style="display:none;">
-            <label for="technique">Kies de techniek (EN Klasse B):</label>
+            <label for="technique">Opstelling:</label>
             <select id="technique" name="technique">
-                <option value="" disabled selected>Selecteer techniek</option>
+                <option value="" disabled selected>Selecteer opstelling</option>
                 <option value="SWSI">SWSI (Single-Wall Single Image)</option>
                 <option value="DWSI">DWSI (Double-Wall Single Image)</option>
                 <option value="DWDI">DWDI (Double-Wall Double Image)</option>
@@ -70,15 +85,15 @@
         </div>
 
         <div id="asmeOptions" style="display:none;">
-            <label for="asmeTechnique">Kies de ASME techniek:</label>
+            <label for="asmeTechnique">Plaats van de BKI:</label>
             <select id="asmeTechnique" name="asmeTechnique">
-                <option value="" disabled selected>Selecteer techniek</option>
+                <option value="" disabled selected>locatie BKI</option>
                 <option value="Sourceside">BKI bronzijde</option>
                 <option value="Filmside">BKI Filmzijde</option>
             </select>
             <br><br>
 
-            <label for="weldType">Kies de las type (A, B, C, D):</label>
+            <label for="weldType">Kies het las type (zie afbeelding):</label>
             <select id="weldType" name="weldType">
                 <option value="" disabled selected>Selecteer las type</option>
                 <option value="A">A</option>
@@ -93,25 +108,15 @@
         </div>
         <br><br>
 
-        <button type="submit">Bekijk het vereiste draadje</button>
+        <button type="submit" class="btn">Geef het vereiste draadje</button>
     </form>
 
     <h2>Resultaat</h2>
-    <p id="result" style="color: #F5DF4D;"></p>
+    <h2 id="result" style="color: #F5DF4D;"></h2>
     
-    <img id="asmeImage" src="Lascategorie.png" alt="ASME Lastype" style="display:none;">
+    <img id="asmeImage" src="Lascategorie.png" alt="ASME Lastype" style="display:none; align:center;">
 
-    <script>
-        document.getElementById("norm").addEventListener("change", function() {
-            var norm = document.getElementById("norm").value;
-            if (norm === "EN") {
-                document.getElementById("enOptions").style.display = "block";
-                document.getElementById("asmeOptions").style.display = "none";
-            } else {
-                document.getElementById("enOptions").style.display = "none";
-                document.getElementById("asmeOptions").style.display = "block";
-            }
-        });
+        <script>
 
         document.getElementById("wanddikte").addEventListener("input", updateLasoverdikte);
         document.getElementById("weldType").addEventListener("change", updateLasoverdikte);
@@ -120,33 +125,23 @@
             var maxOverdikte = 0;
 
             if (weldType === "A") {
-                if (wanddikte < 2.5) maxOverdikte = 0.8;
-                else if (wanddikte < 5) maxOverdikte = 1.5;
-                else if (wanddikte < 13) maxOverdikte = 2.5;
-                else if (wanddikte < 25) maxOverdikte = 3;
-                else if (wanddikte < 50) maxOverdikte = 4;
-                else if (wanddikte < 76) maxOverdikte = 5.5;
-                else if (wanddikte < 100) maxOverdikte = 6;
-                else maxOverdikte = 8;
+                if (wanddikte <= 2.4) maxOverdikte = 0.8;
+                else if (wanddikte <= 4.8) maxOverdikte = 1.5;
+                else if (wanddikte <= 13) maxOverdikte = 2.5;
+                else if (wanddikte <= 25) maxOverdikte = 2.5;
+                else maxOverdikte = 3;
             } else if (weldType === "B" || weldType === "C") {
-                if (wanddikte < 2.5) maxOverdikte = 2.5;
-                else if (wanddikte < 5) maxOverdikte = 2.5;
-                else if (wanddikte < 13) maxOverdikte = 3;
-                else if (wanddikte < 25) maxOverdikte = 4;
-                else if (wanddikte < 50) maxOverdikte = 4;
-                else if (wanddikte < 76) maxOverdikte = 4;
-                else if (wanddikte < 100) maxOverdikte = 5.5;
-                else if (wanddikte < 125) maxOverdikte = 6;
-                else maxOverdikte = 8;
+                if (wanddikte <= 2.4) maxOverdikte = 2.5;
+                else if (wanddikte <= 4.8) maxOverdikte = 3;
+                else if (wanddikte <= 13) maxOverdikte = 4;
+                else if (wanddikte <= 25) maxOverdikte = 5;
+                else maxOverdikte = 6;
             } else if (weldType === "D") {
-                if (wanddikte < 2.5) maxOverdikte = 0.8;
-                else if (wanddikte < 5) maxOverdikte = 1.5;
-                else if (wanddikte < 13) maxOverdikte = 2.5;
-                else if (wanddikte < 25) maxOverdikte = 3;
-                else if (wanddikte < 50) maxOverdikte = 4;
-                else if (wanddikte < 76) maxOverdikte = 5.5;
-                else if (wanddikte < 100) maxOverdikte = 6;
-                else maxOverdikte = 8;
+                if (wanddikte <= 2.4) maxOverdikte = 0.8;
+                else if (wanddikte <= 4.8) maxOverdikte = 1.5;
+                else if (wanddikte <= 13) maxOverdikte = 2.5;
+                else if (wanddikte <= 25) maxOverdikte = 2.5;
+                else maxOverdikte = 3;
             }
 
             return maxOverdikte;
@@ -161,7 +156,7 @@
                 var maxOverdikte = getMaxOverdikte(weldType, wanddikte);
                 lasoverdikteField.value = maxOverdikte.toFixed(1); // Toon de lasoverdikte in het veld
                 lasoverdikteField.readOnly = false; // Maak het veld bewerkbaar
-                lasoverdikteField.max = maxOverdikte.toFixed(1); // Stel de max in op de berekende waarde
+                lasoverdikteField.max = 2 * maxOverdikte.toFixed(1); // Stel de max in op de berekende waarde
             } else {
                 lasoverdikteField.value = ''; // Leeg het veld als de benodigde info ontbreekt
                 lasoverdikteField.readOnly = true; // Maak het veld weer readonly
@@ -176,7 +171,68 @@
             var wanddikte = parseFloat(document.getElementById("wanddikte").value);
             var wire = "Onbekend";
 
-            if (norm === "EN") {
+            if (norm === "EN-A") {
+                var technique = document.getElementById("technique").value;
+                var source = document.getElementById("source").value; // Get source here
+                let penetratedThickness = 0;
+                if (technique === "SWSI") {
+                    penetratedThickness = wanddikte;
+                    if (penetratedThickness <= 1.2) wire = "W18";
+                    else if (penetratedThickness <= 2.0) wire = "W17";
+                    else if (penetratedThickness <= 3.5) wire = "W16";
+                    else if (penetratedThickness <= 5) wire = "W15";
+                    else if (penetratedThickness <= 7) wire = "W14";
+                    else if (penetratedThickness <= 10) wire = "W13";
+                    else if (penetratedThickness <= 15) wire = "W12";
+                    else if (penetratedThickness <= 25) wire = "W11";
+                    else if (penetratedThickness <= 32) wire = "W10";
+                    else if (penetratedThickness <= 40) wire = "W9";
+                    else if (penetratedThickness <= 55) wire = "W8";
+                    else if (penetratedThickness <= 85) wire = "W7";
+                } else if (technique === "DWSI") {
+                    penetratedThickness = wanddikte * 2;
+                    if (penetratedThickness <= 1.2) wire = "W18";
+                    else if (penetratedThickness <= 2.0) wire = "W17";
+                    else if (penetratedThickness <= 3.5) wire = "W16";
+                    else if (penetratedThickness <= 5) wire = "W15";
+                    else if (penetratedThickness <= 10) wire = "W14";
+                    else if (penetratedThickness <= 15) wire = "W13";
+                    else if (penetratedThickness <= 22) wire = "W12";
+                    else if (penetratedThickness <= 38) wire = "W11";
+                    else if (penetratedThickness <= 48) wire = "W10";
+                    else if (penetratedThickness <= 60) wire = "W9";
+                    else if (penetratedThickness <= 85) wire = "W8";
+                } else if (technique === "DWDI") {
+                    penetratedThickness = wanddikte * 2;
+                    if (penetratedThickness <= 1.2) wire = "W18";
+                    else if (penetratedThickness <= 2.0) wire = "W17";
+                    else if (penetratedThickness <= 3.5) wire = "W16";
+                    else if (penetratedThickness <= 5) wire = "W15";
+                    else if (penetratedThickness <= 7) wire = "W14";
+                    else if (penetratedThickness <= 12) wire = "W13";
+                    else if (penetratedThickness <= 18) wire = "W12";
+                    else if (penetratedThickness <= 30) wire = "W11";
+                    else if (penetratedThickness <= 40) wire = "W10";
+                    else if (penetratedThickness <= 50) wire = "W9";
+                    else if (penetratedThickness <= 60) wire = "W8";
+                    else if (penetratedThickness <= 85) wire = "W7";
+                }
+
+                // New edge case logic for EN-A
+                if (source === "Se75") {
+                    if (technique === "DWDI" && penetratedThickness <= 12) {
+                        wire = "W" + (parseInt(wire.substring(1)) - 1);
+                    } else if ((technique === "SWSI" || technique === "DWSI") && penetratedThickness <= 20) {
+                        wire = "W" + (parseInt(wire.substring(1)) - 1);
+                    }
+                } else if (source === "Ir192") {
+                    if (technique === "DWDI" && penetratedThickness > 10 && penetratedThickness <= 25) {
+                        wire = "W" + (parseInt(wire.substring(1)) - 1);
+                    } else if ((technique === "SWSI" || technique === "DWSI") && penetratedThickness > 10 && penetratedThickness <= 40) {
+                        wire = "W" + (parseInt(wire.substring(1)) - 1);
+                    }
+                }
+            } else if (norm === "EN-B") {
                 var technique = document.getElementById("technique").value;
                 var source = document.getElementById("source").value;
                 var doorstraaldeDikte = 2 * wanddikte; // Voor w = 2 * t
@@ -219,16 +275,21 @@
                 }
 
                 if (source === "Se75") {
-                    if ((technique === "SWSI" || technique === "DWSI") && wanddikte <= 20) {
+                    if (technique === "SWSI"  && wanddikte >5 && wanddikte <= 20) {
                         wire = "W" + (parseInt(wire.substring(1)) - 1);
-                    } else if (technique === "DWDI" && doorstraaldeDikte <= 12) {
+                    } else if (technique === "DWDI" && doorstraaldeDikte >5 &&  doorstraaldeDikte <= 12) {
                         wire = "W" + (parseInt(wire.substring(1)) - 1);
+                    } else if (technique === "DWSI" && doorstraaldeDikte >5 && doorstraaldeDikte <= 20) {
+                        wire = "W" + (parseInt(wire.substring(1))-1);
                     }
+                    
                 } else if (source === "Ir192") {
-                    if ((technique === "SWSI" || technique === "DWSI") && doorstraaldeDikte >= 10 && doorstraaldeDikte <= 40) {
+                    if (technique === "SWSI" && wanddikte >= 10 && wanddikte <= 40) {
                         wire = "W" + (parseInt(wire.substring(1)) - 1);
                     } else if (technique === "DWDI" && doorstraaldeDikte > 10 && doorstraaldeDikte <= 25) {
                         wire = "W" + (parseInt(wire.substring(1)) - 1);
+                    } else if (technique === "DWSI" && doorstraaldeDikte >10 && doorstraaldeDikte <= 40) {
+                        wire = "W" + (parseInt(wire.substring(1)) - 1 );
                     }
                 }
 
@@ -270,7 +331,7 @@
     var norm = document.getElementById("norm").value;
     var asmeImage = document.getElementById("asmeImage");
 
-    if (norm === "EN") {
+    if (norm === "EN-A" || norm === "EN-B") {
         document.getElementById("enOptions").style.display = "block";
         document.getElementById("asmeOptions").style.display = "none";
         asmeImage.style.display = "none";  // Verberg de afbeelding

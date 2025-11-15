@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <a href="index.html" class="home-icon"><i class="fas fa-home"></i></a>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zinnen</title>
+    <style>
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            padding: 50px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: #F5DF4D; text-align: center;">Rapportage zinnen</h1>
+    <h2 style="color: #f5eaa2; text-align: center;">(klik om te kopieëren)</h2>
+    <!-- De knop om het pop-up venster te openen -->
+    <button class="info-btn" onclick="openModal('myModal')">i</button>
+
+    <!-- Het pop-up venster -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myModal')">&times;</span>
+            <p>Verschillende zinnen die handig kunnen zijn om toe te voegen aan de rapportage, klik erop om te kopieren </p>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- Link naar externe JavaScript -->
+
+    <script>
+        function copyText(element) {
+            // Creëer een tijdelijk tekstveld om de tekst in op te slaan
+            const tempInput = document.createElement("textarea");
+            tempInput.value = element.innerText; // De tekst van het aangeklikte element
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("Tekst gekopieerd: " + tempInput.value);
+        }
+    </script>
+
+    <!-- Rapportage zinnen die gekopieerd kunnen worden -->
+    <p style="color: #f7e672; font-size: 1.5rem;" onclick="copyText(this)">Double film technique used in order to get the correct density in the weld and parent materials.</p>
+    <p style="color: #fcf1a4; font-size: 1.5rem;" onclick="copyText(this)">In consultancy with the client, Se75 used instead of X-ray due to the limited accessibility and/or radiation safety.</p>
+    <p style="color: #f7e672; font-size: 1.5rem;" onclick="copyText(this)">2 films (D4 & D5) per exposure used to get the correct density in the parent material and the weld.</p>
+    <p style="color: #fcf1a4; font-size: 1.5rem;" onclick="copyText(this)">Due to the geometry of the object, limited accessibility and/or radiation safety, Se75 used instead of X-ray.</p>
+    <p style="color: #f7e672; font-size: 1.5rem;" onclick="copyText(this)">Due to limited accessibility, the IQI is placed perpendicular to the weld</p>
+    <p style="color: #fcf1a4; font-size: 1.5rem;" onclick="copyText(this)">2 films (D5 & D7) per exposure used to have a larger range in density because of the difference in wall thickness.</p>
+    <p style="color: #f7e672; font-size: 1.5rem;" onclick="copyText(this)">Examination limited because of the geometry of the object.</p>
+    <p style="color: #fcf1a4; font-size: 1.5rem;" onclick="copyText(this)">Due to limited accessibility only 2 exposures possible.</p>
+
+</body>
+</html>

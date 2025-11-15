@@ -1,6 +1,5 @@
 const CACHE_NAME = 'pwa-cache-v1';
 
-
 // Lijst van bestanden om te cachen bij installatie
 const FILES_TO_CACHE = [
   '/rt/',
@@ -35,6 +34,7 @@ const FILES_TO_CACHE = [
   '/rt/verzet.html',
   '/rt/buistabel.html',
   '/rt/smart300.png',
+  '/rt/filmkwaliteit.html',
   '/rt/ceramrondstraler.png',
   '/rt/d4balteau107.png',
   '/rt/d4balteau119.png',
@@ -42,9 +42,21 @@ const FILES_TO_CACHE = [
   '/rt/d7balteau119.png',
   '/rt/balteaurondstraleroud.png',
   '/rt/balteauspotgfd306.png',
-
-  
- 
+  '/rt/tape1.PNG',
+  '/rt/tape2.PNG',
+  '/rt/tape3.PNG',
+  '/rt/tape4.PNG', 
+  '/rt/bglight.png',
+  '/rt/schuifje1.png',
+  '/rt/schuifje2.png',
+  '/rt/schuifje3.png',
+  '/rt/schuifje4.png',
+  '/rt/schuifje.html',
+  '/rt/kvregel.html',
+  '/rt/onstream.html',
+  '/rt/gevuldeleiding.html',
+  '/rt/bronkeuze2.html',
+  '/rt/onstreamffd.html'
 ];
 
 // Installeer de service worker en cache de essentiële bestanden
@@ -75,27 +87,26 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch event: gebruik network-first strategie
+// Fetch event met Stale-While-Revalidate strategie zonder offline fallback
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // Als de netwerkrespons goed is, sla die op in de cache
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, response.clone());
-          return response;
-        });
-      })
-      .catch(() => {
-        // Als het netwerk faalt, haal het uit de cache
-        return caches.match(event.request).then((response) => {
-          if (response) {
-            return response;
-          } else if (event.request.mode === 'navigate') {
-            // Als het een navigatieverzoek is en er is geen cache, toon de offline pagina
-            return caches.match(OFFLINE_URL);
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.match(event.request).then((cachedResponse) => {
+        // Start een netwerkverzoek in de achtergrond
+        const fetchPromise = fetch(event.request).then((networkResponse) => {
+          // Controleer of de netwerkrespons geldig is voordat we de cache bijwerken
+          if (networkResponse && networkResponse.status === 200) {
+            cache.put(event.request, networkResponse.clone());
           }
+          return networkResponse;
+        }).catch(() => {
+          // Als het netwerk faalt, gebruik dan de gecachete versie
+          return cachedResponse;
         });
-      })
+
+        // Geef de gecachete versie onmiddellijk terug, of wacht op de netwerkversie
+        return cachedResponse || fetchPromise;
+      });
+    })
   );
 });

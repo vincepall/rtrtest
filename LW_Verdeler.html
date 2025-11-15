@@ -22,7 +22,7 @@
         }
 
         label, input {
-            display: block;
+            display: inline-block;
             margin-bottom: 10px;
             width: 100%; /* Zorgt dat invoervelden de hele breedte nemen binnen de container */
         }
@@ -30,6 +30,20 @@
         input {
             padding: 10px;
             font-size: 16px;
+        }
+
+        .btn {
+            background-color: #F5DF4D; /* Gele kleur */
+            border: none;
+            color: black;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
         }
 
         .result {
@@ -67,17 +81,17 @@
         <p>Voer de totale lengte in (in mm):</p>
         <input type="number" id="totaleLengte" placeholder="Totale lengte in mm" required>
 
-        <button onclick="verdeelLengte()">Verdeel Lengte</button>
+        <button onclick="verdeelLengte()" class="btn" >Verdeel Lengte</button>
         <p id="resultaat" style="color: #F5DF4D;"></p>
 
-        <h2>Optioneel:</h2>        
+        <h3>Optioneel:</h3>        
 
 
-        <p>Voer de maximale lengte per deel in (in mm, standaard 400 mm):</p>
-        <input type="number" id="maxLengte" value="400" required>
+        <p style="font-size: smaller;">Voer de maximale lengte per deel in (in mm, standaard 400 mm):</p>
+        <input style="font-size: 12px; width: 50%; padding: 7px;" type="number" id="maxLengte" value="400" required>
         
-        <p>Voer de lengte van de uiteindes in (in mm, standaard 200 mm, maximaal 230 mm):</p>
-        <input type="number" id="uiteindeLengte" value="200" max="230" required>
+        <p style="font-size: smaller;">Voer de lengte van de uiteindes in (in mm, standaard 200 mm, maximaal 230 mm):</p>
+        <input style="font-size: 12px; width: 50%; padding: 7px;" type="number" id="uiteindeLengte" value="200" max="230" required>
         
     </div>
 

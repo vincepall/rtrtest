@@ -13,9 +13,28 @@
             font-family: 'Roboto Condensed', sans-serif;
             padding: 50px;
             margin: 0;
+            min-height: 150vh;
         }
 
+        /* Style for the calculate button */
+        button[type="button"] {
+            background-color: #F5DF4D; /* Yellow color like the header */
+            font-size: 20px; /* Increase font size */
+            padding: 10px 20px; /* Increase padding */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button[type="button"]:hover {
+            background-color: #e0c944; /* Slightly darker yellow on hover */
+        }
         
+        label[for="ffdVerandert"] {
+            margin-bottom: 20px;
+        }
+
     </style>
     <script>
         // Functie om minuten en seconden naar totale seconden om te zetten
@@ -62,11 +81,10 @@
             const seconden = parseInt(document.getElementById("seconden").value);
             const ffdVerandert = document.getElementById("ffdVerandert").checked;
             const oudeFocus = parseFloat(document.getElementById("oudeFocus").value);
-            const nieuweFocus = parseFloat(document.getElementById("nieuweFocus").value);
-            const keuze = document.querySelector('input[name="keuze"]:checked').value;
+            let nieuweFocus = parseFloat(document.getElementById("nieuweFocus").value);
 
             // Controleer of de tijd en focuswaarden geldig zijn
-            if (isNaN(minuten) || isNaN(seconden) || (ffdVerandert && (isNaN(oudeFocus) || isNaN(nieuweFocus)))) {
+            if (isNaN(minuten) || isNaN(seconden) || (ffdVerandert && isNaN(oudeFocus))) {
                 document.getElementById("resultaat").innerHTML = "Voer geldige waarden in.";
                 return;
             }
@@ -74,30 +92,41 @@
             // Zet tijd om naar totale seconden
             let tijdInSeconden = tijdNaarSeconden(minuten, seconden);
 
-            // Als de Film Focus Afstand verandert, pas focusverandering toe
+            // Als de Film Focus Afstand verandert, pas focusverandering toe (alleen als nieuweFocus geldig is)
             if (ffdVerandert) {
-                tijdInSeconden = berekenFocusverandering(tijdInSeconden, nieuweFocus, oudeFocus);
+                if (!isNaN(nieuweFocus)) {
+                    tijdInSeconden = berekenFocusverandering(tijdInSeconden, nieuweFocus, oudeFocus);
+                } else {
+                    nieuweFocus = "onveranderde"; // Focus is niet veranderd
+                }
+            } else {
+                nieuweFocus = "onveranderde"; // FFD verandert niet, dus gebruik onveranderde focus
             }
 
+            const keuze = document.querySelector('input[name="keuze"]:checked').value;
             let resultaat;
+
             if (keuze === "D4") {
                 resultaat = berekenD5D7VanD4(tijdInSeconden);
-                document.getElementById("resultaat").innerHTML = 
-                    `D5 = ${secondenNaarTijd(resultaat.d5)}<br>D7 = ${secondenNaarTijd(resultaat.d7)}`;
+                document.getElementById("resultaat").innerHTML =
+                    `De tijd op ${nieuweFocus} FFD is:<br>D5 = ${secondenNaarTijd(resultaat.d5)}<br>D7 = ${secondenNaarTijd(resultaat.d7)}`;
             } else if (keuze === "D5") {
                 resultaat = berekenD4D7VanD5(tijdInSeconden);
-                document.getElementById("resultaat").innerHTML = 
-                    `D4 = ${secondenNaarTijd(resultaat.d4)}<br>D7 = ${secondenNaarTijd(resultaat.d7)}`;
+                document.getElementById("resultaat").innerHTML =
+                    `De tijd op ${nieuweFocus} FFD is:<br>D4 = ${secondenNaarTijd(resultaat.d4)}<br>D7 = ${secondenNaarTijd(resultaat.d7)}`;
             } else if (keuze === "D7") {
                 resultaat = berekenD4D5VanD7(tijdInSeconden);
-                document.getElementById("resultaat").innerHTML = 
-                    `D4 = ${secondenNaarTijd(resultaat.d4)}<br>D5 = ${secondenNaarTijd(resultaat.d5)}`;
+                document.getElementById("resultaat").innerHTML =
+                    `De tijd op ${nieuweFocus} FFD is:<br>D4 = ${secondenNaarTijd(resultaat.d4)}<br>D5 = ${secondenNaarTijd(resultaat.d5)}`;
             }
+
+            // Scroll naar het resultaat na de berekening
+            document.getElementById("resultaat").scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </head>
 <body>
-    <h1 style="color: #F5DF4D; text-align: center;">Filmsoort (+FFD) Verandering</h1>
+    <h1 style="color: #F5DF4D; text-align: center;">Filmsoort Verandering</h1>
 
     <!-- De knop om het pop-up venster te openen -->
     <button class="info-btn" onclick="openModal('myModal')">i</button>
@@ -106,7 +135,7 @@
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('myModal')">&times;</span>
-            <p>Voer de tijd in voor een filmsoort en krijg de tijd voor de andere filmsoorten. 
+            <p>Voer de tijd in voor een filmsoort en krijg de tijd voor de andere filmsoorten.
                Bij verandering van de Film Focus Afstand wordt ook de nieuwe tijd voor D4, D5, en D7 berekend.</p>
         </div>
     </div>
@@ -127,8 +156,8 @@
         Seconden: <input type="number" id="seconden" placeholder="Seconden" min="0" max="59"><br><br>
 
         <!-- Optie om FFD aan te geven -->
-        <input type="checkbox" id="ffdVerandert">
-        <label for="ffdVerandert">Film Focus Afstand (FFD) verandert</label><br><br>
+        <label for="ffdVerandert">Focus (FFD) verandert</label>
+        <input type="checkbox" id="ffdVerandert"><br><br>
 
         <div id="focusFields" style="display: none;">
             <label for="oudeFocus">Oude Focus:</label>
@@ -141,7 +170,7 @@
     </form>
 
     <h2>Resultaat</h2>
-    <p id="resultaat" style="color: #F5DF4D;"></p>
+    <h2 id="resultaat" style="color: #F5DF4D;"></h2>
 
     <script>
         // Toon/verberg focusvelden wanneer FFD verandert wordt aangevinkt

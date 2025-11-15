@@ -15,13 +15,14 @@ body {
     text-align: center;
     padding: 50px;
     margin: 0;
+    font-size: 1.3rem;
     color: var(--text-color);
     text-shadow:
-        -2px -2px 0 #000,
-         2px -2px 0 #000,
-        -2px  2px 0 #000,
-         2px  2px 0 #000;
-    background-image: url('bg2.jpg');
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+    background-image: url('bglight.png');
     background-size: cover; /* This will make the image cover the entire background */
     background-position: center; /* This will center the image */
     background-repeat: no-repeat; /* This prevents the image from repeating */
@@ -34,10 +35,11 @@ body {
 h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
+    align: center;
 }
 
 p {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     margin-bottom: 30px;
 }
 
@@ -60,7 +62,7 @@ p {
     background-color: var(--button-color);
     padding: 12px 20px; /* Iets kleinere padding voor compactheid */
     border-radius: 50px;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: bold;
     transition: background-color 0.3s, transform 0.3s;
     display: inline-block;
@@ -145,11 +147,11 @@ p {
     background-color: #fff;
     color: #000;
     margin: 15% auto;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #888;
     width: 80%; /* Je kunt deze breedte aanpassen naar wens */
     text-shadow: none;
-
+    font-size: 10px;
 }
 
 /* Stijl voor de sluitknop (x) */
@@ -188,3 +190,84 @@ p {
 .info-btn:hover {
     opacity: 1; /* Oplichten bij hover */
 }
+
+/* Styling voor tekstgerelateerde invoervelden */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"] {
+    border: 5px solid #F5DF4D;
+    border-radius: 1.05em;
+    box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.1); 
+    outline: none;
+    background-color: #d9d2a3;
+    text-align: center;
+    font-size: 1.05em;
+    padding: 4px;
+    width: 80%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus {
+    border-color: #051aff;
+}
+
+input:disabled {
+    background-color: #434544;
+}
+
+select {
+    border: 5px solid #F5DF4D;
+    border-radius: 1.05em;
+    box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.1); 
+    outline: none;
+    background-color: #d9d2a3;
+    text-align: center;
+    font-size: 1.05em;
+    padding: 4px;
+    width: 80%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+select: focus {
+    border-color: #051aff;
+}
+
+/* Verberg standaard checkbox */
+input[type="checkbox"], input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #f2da4e;
+  border: 5px solid #d6c145;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  position: relative;
+}
+
+/* Voor de checkbox */
+input[type="checkbox"] {
+  border-radius: 3px;
+}
+
+/* Voor de radio */
+input[type="radio"] {
+  border-radius: 50%;
+}
+
+/* Stijl voor aangevinkte checkbox */
+input[type="checkbox"]:checked {
+  background-color: #051aff;
+}
+
+/* Stijl voor aangevinkte radio */
+input[type="radio"]:checked {
+  background-color: #051aff;
+}
+

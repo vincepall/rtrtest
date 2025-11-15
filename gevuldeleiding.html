@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <a href="index.html" class="home-icon"><i class="fas fa-home"></i></a>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gevulde Leiding</title>
+    <style>
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            padding: 50px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Style for the calculate button */
+        button.calculate-btn {
+            background-color: #F5DF4D;
+            color: black;
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button.calculate-btn:hover {
+            background-color: #e6c944;
+        }
+
+        label, select, input {
+            display: block;
+            width: 100%;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 style="color: #F5DF4D; text-align: center;">Gevulde Leiding</h1>
+
+     <!-- De knop om het pop-up venster te openen -->
+    <button class="info-btn" onclick="openModal('myModal')">i</button>
+
+    <!-- Het pop-up venster -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myModal')">&times;</span>
+            <p>Tool om de totale af te lezen dikte te krijgen. De tool berekent het staalequivalent van het medium en telt dit op bij 2x de wanddikte.
+            </p>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- Link naar externe JavaScript -->
+
+
+    <label for="diameter">Diameter van de pijp (D) in mm:</label>
+    <input type="number" id="diameter" placeholder="Vul de diameter in">
+
+    <label for="wanddikte">Wanddikte van de pijp (t) in mm:</label>
+    <input type="number" id="wanddikte" placeholder="Vul de wanddikte in">
+
+    <label for="dichtheid">Dichtheid van de inhoud (kg/m³):</label>
+    <select id="dichtheid" onchange="handleDensityChange()">
+        <option value="997">Water (997 kg/m³)</option>
+        <option value="900">Aardolie (900 kg/m³)</option>
+        <option value="879">Benzeen (879 kg/m³)</option>
+        <option value="720">Benzine (720 kg/m³)</option>
+        <option value="791">Aceton (791 kg/m³)</option>
+        <option value="1106">Chloorbenzeen (1106 kg/m³)</option>
+        <option value="custom">Anders (eigen dichtheid invoeren)</option>
+    </select>
+    <input type="number" id="customDensity" placeholder="Voer eigen dichtheid in" style="display:none;">
+
+    <button type="button" class ="calculate-btn" onclick="berekenDikte()">Bereken</button>
+
+    <h2>Resultaat</h2>
+    <h2 id="resultaat" style="color: #F5DF4D;"></h2>
+    
+
+    <script>
+        function handleDensityChange() {
+            const dichtheidSelect = document.getElementById('dichtheid');
+            const customDensityInput = document.getElementById('customDensity');
+            if (dichtheidSelect.value === 'custom') {
+                customDensityInput.style.display = 'block';
+            } else {
+                customDensityInput.style.display = 'none';
+            }
+        }
+
+        function berekenDikte() {
+            const D = parseFloat(document.getElementById('diameter').value);
+            const t = parseFloat(document.getElementById('wanddikte').value);
+
+            let dichtheid;
+            const dichtheidSelect = document.getElementById('dichtheid');
+            if (dichtheidSelect.value === 'custom') {
+                dichtheid = parseFloat(document.getElementById('customDensity').value);
+            } else {
+                dichtheid = parseFloat(dichtheidSelect.value);
+            }
+
+            if (isNaN(D) || isNaN(t) || isNaN(dichtheid)) {
+                document.getElementById('resultaat').textContent = "Vul alle velden correct in.";
+                return;
+            }
+
+            const totaleDikte = 2 * t + ((dichtheid / 7800) * (D - 2 * t));
+
+            document.getElementById('resultaat').textContent = `De totale doorstraalde dikte is ${totaleDikte.toFixed(2)} mm.`;
+
+            document.getElementById("resultaat").scrollIntoView({ behavior: 'smooth' });
+
+        }
+    </script>
+
+</body>
+</html>
+
