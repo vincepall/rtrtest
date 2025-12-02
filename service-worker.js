@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-cache-v1';
+const CACHE_NAME = 'pwa-cache-v4';
 
 // Lijst van bestanden om te cachen bij installatie
 const FILES_TO_CACHE = [
@@ -54,6 +54,7 @@ const FILES_TO_CACHE = [
   '/rt/schuifje.html',
   '/rt/kvregel.html',
   '/rt/onstream.html',
+  '/rt/pruts.html',
   '/rt/gevuldeleiding.html',
   '/rt/bronkeuze2.html',
   '/rt/onstreamffd.html'
