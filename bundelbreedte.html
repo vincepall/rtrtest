@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expert Bundelbreedte & Dikte Calculator</title>
+    <title>Bundelbreedte & Dikte Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
@@ -196,12 +196,12 @@
 <div class="main-container">
     <!-- LINKER KOLOM: INVOER -->
     <div class="panel">
-        <h1><i class="fas fa-radiation"></i> Instellingen</h1>
+        <h1><i class="fas fa-radiation"></i> Bundelbreedte</h1>
 
         <!-- Modus Selectie -->
         <div class="mode-switch">
             <div class="mode-btn active" onclick="setMode('calc')" id="btn-calc">Bereken Dikte</div>
-            <div class="mode-btn" onclick="setMode('opt')" id="btn-opt">Optimaliseer FFD</div>
+            <div class="mode-btn" onclick="setMode('opt')" id="btn-opt">Bereken minimale FFD</div>
         </div>
 
         <!-- Stap 1: Bron & Bundel -->
@@ -249,12 +249,12 @@
             <div class="form-group">
                 <label for="ffd">FFD (mm):</label>
                 <input type="number" id="ffd" value="800" min="50" oninput="calculate()">
-                <small style="color:#7f8c8d">Afstand Bron tot Filmvlak.</small>
+                <small style="color:#7f8c8d">Afstand Bron tot Film.</small>
             </div>
             <div class="form-group">
                 <label for="userLength">Te belichten lengte (mm):</label>
                 <input type="number" id="userLength" value="480" min="1" oninput="calculate()">
-                <small style="color:#7f8c8d">Lengte op de film.</small>
+                <small style="color:#7f8c8d">effectieve filmlengte</small>
             </div>
         </div>
 
@@ -262,7 +262,7 @@
         <div id="optInputs" class="hidden">
             <div class="result-card highlight" style="margin-bottom: 15px;">
                 <div class="result-label">Doel</div>
-                <div class="result-sub">Vind minimale FFD zodat dikte < <b>Max</b>.</div>
+                <div class="result-sub">Vind minimale FFD met t' < <b>Max</b>.</div>
             </div>
 
             <div class="form-group">
@@ -306,9 +306,9 @@
                 <div class="result-sub">Bron tot rand film</div>
             </div>
             <div class="result-card success hidden" id="resOptFFDCard">
-                <div class="result-label">Geadviseerde FFD</div>
+                <div class="result-label">Minimale FFD</div>
                 <div class="result-value" id="resOptFFD">-</div>
-                <div class="result-sub">Minimaal benodigd</div>
+                <div class="result-sub">Let op: geen marge!</div>
             </div>
         </div>
     </div>
